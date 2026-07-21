@@ -5055,7 +5055,7 @@
     "memoryDesc": "Persistent cross-session conversational memory",
     "memoryEnabled": "Enable Memory",
     "memoryEnabledDesc": "When enabled, OmniRoute will inject relevant past context.",
-    "memoryTokenCostWarning": "__MISSING__:Heads up: with memory enabled, OmniRoute injects up to {tokens} tokens of retrieved context into every chat request — this increases token usage and cost. To skip injection for a specific request, send the \"x-omniroute-no-memory: true\" header.",
+    "memoryTokenCostWarning": "참고: 메모리를 활성화하면 OmniRoute는 모든 채팅 요청에 검색된 컨텍스트를 최대 {tokens}토큰까지 주입하므로 토큰 사용량과 비용이 증가합니다. 특정 요청의 주입을 건너뛰려면 \"x-omniroute-no-memory: true\" 헤더를 전송하세요.",
     "maxTokens": "Max Tokens",
     "retentionDays": "Retention",
     "recent": "Recent",
@@ -5101,8 +5101,8 @@
     "homeQuickStartDesc": "Show the Quick Start panel on the Home page.",
     "homeProviderTopology": "Provider Topology",
     "homeProviderTopologyDesc": "Show the Provider Topology on the Home page.",
-    "accountEmailVisibility": "__MISSING__:Account email visibility",
-    "accountEmailVisibilityDesc": "__MISSING__:Show full account emails across providers, combos, logs, quota, and playground screens. Turn this off to mask them by default.",
+    "accountEmailVisibility": "계정 이메일 표시",
+    "accountEmailVisibilityDesc": "공급자, 콤보, 로그, 할당량 및 플레이그라운드 화면에서 전체 계정 이메일을 표시합니다. 기본적으로 마스킹하려면 이 옵션을 끄세요.",
     "sidebarVisibilityToggle": "Show Sidebar Items",
     "enableCache": "캐시 활성화",
     "cacheTTL": "캐시 TTL",
@@ -6039,58 +6039,58 @@
     "claudeFastModeModelCheckbox": "{model}에 대한 빠른 모드 활성화",
     "claudeFastModeSaveError": "Claude 빠른 모드 설정을 업데이트하지 못했습니다.",
     "authz": {
-      "title": "__MISSING__:Authorization Inventory",
-      "description": "__MISSING__:5-tier route classification with live bypass policy. Read shows the full taxonomy; mutations re-prompt for the management password.",
-      "loading": "__MISSING__:Loading inventory…",
-      "loadError": "__MISSING__:Failed to load authz inventory",
+      "title": "권한 부여 인벤토리",
+      "description": "실시간 우회 정책을 포함한 5단계 경로 분류입니다. 조회 시 전체 분류 체계를 표시하고, 변경 시 관리 비밀번호를 다시 입력해야 합니다.",
+      "loading": "인벤토리 로드 중…",
+      "loadError": "권한 부여 인벤토리를 불러오지 못했습니다",
       "tier": {
-        "LOCAL_ONLY": "__MISSING__:Local only",
-        "ALWAYS_PROTECTED": "__MISSING__:Always protected",
-        "MANAGEMENT": "__MISSING__:Management",
-        "CLIENT_API": "__MISSING__:Client API",
-        "PUBLIC": "__MISSING__:Public"
+        "LOCAL_ONLY": "로컬 전용",
+        "ALWAYS_PROTECTED": "항상 보호됨",
+        "MANAGEMENT": "관리",
+        "CLIENT_API": "클라이언트 API",
+        "PUBLIC": "공개"
       },
       "bypass": {
-        "section": "__MISSING__:Manage-scope bypass",
+        "section": "관리 범위 우회",
         "kill_switch": {
-          "label": "__MISSING__:Bypass kill-switch",
-          "desc": "__MISSING__:Master toggle. When off, no LOCAL_ONLY prefix is reachable from non-loopback regardless of the per-prefix list."
+          "label": "우회 킬 스위치",
+          "desc": "마스터 토글입니다. 꺼져 있으면 접두사 목록과 관계없이 비루프백 호스트에서 어떤 LOCAL_ONLY 접두사에도 접근할 수 없습니다."
         },
         "prefix": {
-          "label": "__MISSING__:Bypassable prefixes",
-          "desc": "__MISSING__:LOCAL_ONLY prefixes that manage-scope API keys (or dashboard sessions) may reach from non-loopback hosts.",
-          "add": "__MISSING__:Add prefix",
-          "placeholder": "__MISSING__:/api/mcp/v2/",
-          "empty": "__MISSING__:No prefixes configured. Bypass effectively off."
+          "label": "우회 가능한 접두사",
+          "desc": "관리 범위 API 키(또는 대시보드 세션)가 비루프백 호스트에서 접근할 수 있는 LOCAL_ONLY 접두사입니다.",
+          "add": "접두사 추가",
+          "placeholder": "/api/mcp/v2/",
+          "empty": "구성된 접두사가 없습니다. 우회가 사실상 비활성화되어 있습니다."
         },
-        "cli_tools_runtime_note": "__MISSING__:Spawn-capable prefix. Compile-time deny; cannot be made bypassable. Shown read-only."
+        "cli_tools_runtime_note": "프로세스 실행 가능 접두사입니다. 컴파일 타임에 거부되며 우회 가능하게 만들 수 없습니다. 읽기 전용으로 표시됩니다."
       },
       "password": {
         "prompt": {
-          "label": "__MISSING__:Current password",
-          "desc": "__MISSING__:Re-confirm to apply security-impacting changes."
+          "label": "현재 비밀번호",
+          "desc": "보안에 영향을 주는 변경 사항을 적용하려면 다시 확인하세요."
         },
-        "placeholder": "__MISSING__:Current management password",
-        "cancel": "__MISSING__:Cancel",
-        "submit": "__MISSING__:Apply"
+        "placeholder": "현재 관리 비밀번호",
+        "cancel": "취소",
+        "submit": "적용"
       },
-      "save": "__MISSING__:Save changes",
-      "saved": "__MISSING__:Authz settings updated",
-      "pending": "__MISSING__:Unsaved changes",
+      "save": "변경 사항 저장",
+      "saved": "권한 부여 설정이 업데이트되었습니다",
+      "pending": "저장되지 않은 변경 사항",
       "badge": {
-        "bypassable": "__MISSING__:Bypassable via manage scope",
-        "strict": "__MISSING__:Strict loopback",
-        "auth_required": "__MISSING__:Auth required",
-        "public": "__MISSING__:Public",
-        "always_protected": "__MISSING__:Always protected",
-        "spawn_capable": "__MISSING__:Spawn-capable"
+        "bypassable": "관리 범위를 통해 우회 가능",
+        "strict": "엄격한 루프백",
+        "auth_required": "인증 필요",
+        "public": "공개",
+        "always_protected": "항상 보호됨",
+        "spawn_capable": "프로세스 실행 가능"
       },
       "error": {
-        "PASSWORD_REQUIRED": "__MISSING__:Current password required to apply these changes.",
-        "PASSWORD_MISMATCH": "__MISSING__:Current password is incorrect.",
-        "INSUFFICIENT_SCOPE": "__MISSING__:API key lacks the manage scope.",
-        "BYPASS_PREFIX_NOT_ALLOWED": "__MISSING__:One or more prefixes target spawn-capable routes and cannot be bypassed.",
-        "GENERIC": "__MISSING__:Failed to update authz settings."
+        "PASSWORD_REQUIRED": "이 변경 사항을 적용하려면 현재 비밀번호가 필요합니다.",
+        "PASSWORD_MISMATCH": "현재 비밀번호가 올바르지 않습니다.",
+        "INSUFFICIENT_SCOPE": "API 키에 관리 범위가 없습니다.",
+        "BYPASS_PREFIX_NOT_ALLOWED": "하나 이상의 접두사가 프로세스 실행 가능 경로를 가리키므로 우회할 수 없습니다.",
+        "GENERIC": "권한 부여 설정을 업데이트하지 못했습니다."
       },
       "cors": {
         "wildcard": {
@@ -6207,10 +6207,10 @@
     "codexAutoPingWarning": "Consumes a small amount of real Codex quota on every ping. Off by default — enable only for connections you actively rely on.",
     "codexAutoPingSaveError": "Failed to update Codex Auto-Ping setting",
     "codexAutoPingToggleAria": "Toggle Codex quota auto-ping for {connection}",
-    "credentialRedaction": "__MISSING__:Credential Redaction",
-    "credentialRedactionDesc": "__MISSING__:Redact API keys, tokens, and secrets from context sent to providers and from responses.",
-    "enableCredentialRedaction": "__MISSING__:Enable credential redaction",
-    "enableCredentialRedactionDesc": "__MISSING__:Scrubs API keys, tokens, private keys, and JWTs from messages, tool calls, and responses.",
+    "credentialRedaction": "자격 증명 마스킹",
+    "credentialRedactionDesc": "공급자에게 전송하는 컨텍스트와 응답에서 API 키, 토큰 및 비밀 값을 마스킹합니다.",
+    "enableCredentialRedaction": "자격 증명 마스킹 활성화",
+    "enableCredentialRedactionDesc": "메시지, 도구 호출 및 응답에서 API 키, 토큰, 개인 키 및 JWT를 제거합니다.",
     "description": "설명",
     "enable": "할 수 있게 하다",
     "disable": "장애를 입히다",
