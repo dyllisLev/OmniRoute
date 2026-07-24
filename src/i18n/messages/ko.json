@@ -3475,49 +3475,49 @@
       "cleaning": "정리 중...",
       "cleanNow": "지금 정리",
       "cleanupSuccess": "{count}개의 포인트를 제거했습니다",
-      "cleanupFailed": "__MISSING__:Cleanup failed",
+      "cleanupFailed": "정리하지 못했습니다",
       "banner": "Tier 2 벡터 저장소 — 내장된 sqlite-vec(Tier 1)에 대한 외부 확장 가능한 대안입니다. 매우 큰 메모리 세트가 있거나 인스턴스 간에 공유 메모리를 원하는 경우에만 활성화하십시오. 대부분의 사용자는 sqlite-vec에서 문제가 없습니다. 활성화되면 기본 저장소가 되며, 연결할 수 없는 경우 자동으로 sqlite-vec로 대체됩니다.",
       "collectionHelp": "모든 이름 — OmniRoute는 처음 사용할 때 이름을 생성합니다.",
       "embeddingModelHelp": "처음 사용할 때 벡터 치수를 자동으로 설정합니다. 기존 메모리는 다시 채워지지 않으며 데이터가 존재한 후 모델을 변경하려면 새로운 컬렉션이 필요합니다.",
       "hostHelp": "로컬 Docker: http://localhost:6333 · Qdrant Cloud: 클러스터 URL"
     },
     "rerank": {
-      "enableLabel": "__MISSING__:Enable Rerank",
-      "enableDesc": "__MISSING__:Reorders results with a reranking model after search",
-      "warning": "__MISSING__:Rerank adds +200-500ms latency and additional cost per request. Use sparingly.",
-      "providerModelLabel": "__MISSING__:Rerank Provider / Model",
-      "noProviderWithKey": "__MISSING__:No provider with configured API key. Configure a provider to use rerank.",
-      "selectProviderModel": "__MISSING__:Select a provider/model"
+      "enableLabel": "재정렬 활성화",
+      "enableDesc": "검색 후 재정렬 모델을 사용해 결과 순서를 다시 정합니다",
+      "warning": "재정렬은 요청당 +200~500ms의 지연 시간과 추가 비용을 발생시킵니다. 필요한 경우에만 사용하세요.",
+      "providerModelLabel": "재정렬 제공업체 / 모델",
+      "noProviderWithKey": "구성된 API 키가 있는 제공업체가 없습니다. 재정렬을 사용하려면 제공업체를 구성하세요.",
+      "selectProviderModel": "제공업체/모델 선택"
     },
     "save": "저장",
-    "saving": "__MISSING__:Saving...",
+    "saving": "저장 중...",
     "search": "Search memories...",
     "semantic": "Semantic",
     "summarize": {
-      "title": "__MISSING__:Compact old memories",
-      "noCandidates": "__MISSING__:No memories eligible for compaction (criteria: >30 days old).",
-      "candidatesDesc": "__MISSING__:{count} memories will be compacted into summaries. This action cannot be undone.",
-      "confirm": "__MISSING__:Compact now"
+      "title": "오래된 메모리 압축",
+      "noCandidates": "압축할 수 있는 메모리가 없습니다(조건: 30일 이상 경과).",
+      "candidatesDesc": "{count}개의 메모리가 요약으로 압축됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "confirm": "지금 압축"
     },
     "tabs": {
-      "memories": "__MISSING__:Memories",
-      "playground": "__MISSING__:Playground",
-      "engine": "__MISSING__:Engine"
+      "memories": "메모리",
+      "playground": "플레이그라운드",
+      "engine": "엔진"
     },
     "title": "Memory Management",
     "tokensUsed": "Tokens Used",
     "tooltip": {
-      "totalEntries": "__MISSING__:Total memories stored for this API key",
-      "tokensUsed": "__MISSING__:Estimated total tokens occupied by active memories",
-      "hitRate": "__MISSING__:Read-by-ID cache hit rate (not semantic recall accuracy)",
-      "factual": "__MISSING__:Objective, permanent facts from user context",
-      "episodic": "__MISSING__:Events and experiences from conversation history",
-      "procedural": "__MISSING__:Procedures, workflows, and instructions the assistant should follow",
-      "semantic": "__MISSING__:Concepts, preferences, and domain knowledge"
+      "totalEntries": "이 API 키에 저장된 총 메모리 수",
+      "tokensUsed": "활성 메모리가 사용하는 것으로 추정되는 총 토큰 수",
+      "hitRate": "ID로 읽기 캐시 적중률(시맨틱 검색 정확도가 아님)",
+      "factual": "사용자 컨텍스트의 객관적이고 영구적인 사실",
+      "episodic": "대화 기록의 사건과 경험",
+      "procedural": "어시스턴트가 따라야 할 절차, 워크플로, 지침",
+      "semantic": "개념, 선호도 및 도메인 지식"
     },
     "totalEntries": "Total Entries",
     "type": "Type",
-    "memoryEnabled": "__MISSING__:Memory enabled"
+    "memoryEnabled": "메모리 활성화됨"
   },
   "skills": {
     "title": "Skills",
@@ -3549,13 +3549,13 @@
     "q": "Q",
     "filterSkillsPlaceholder": "이름, 설명 또는 태그로 기술 필터링",
     "allModes": "모든 모드",
-    "totalSkills": "__MISSING__:Total Skills",
-    "enabledSkills": "__MISSING__:Enabled",
-    "totalExecutions": "__MISSING__:Executions",
-    "successRate": "__MISSING__:Success Rate",
-    "marketplaceTab": "__MISSING__:Marketplace",
-    "applyFilters": "__MISSING__:Apply filters",
-    "popularDefaultsLabel": "__MISSING__:Popular by default for selected provider:",
+    "totalSkills": "총 스킬 수",
+    "enabledSkills": "활성화됨",
+    "totalExecutions": "실행 횟수",
+    "successRate": "성공률",
+    "marketplaceTab": "마켓플레이스",
+    "applyFilters": "필터 적용",
+    "popularDefaultsLabel": "선택한 제공업체에서 기본적으로 인기 있는 항목:",
     "onMode": "__MISSING__:ON",
     "offMode": "__MISSING__:OFF",
     "autoMode": "__MISSING__:AUTO",
