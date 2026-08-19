@@ -248,7 +248,10 @@ export async function applyRequestTagRouting(
   await Promise.all(
     providerIds.map(async (providerId) => {
       try {
-        const connections = await getCachedProviderConnections({ provider: providerId, isActive: true });
+        const connections = await getCachedProviderConnections({
+          provider: providerId,
+          isActive: true,
+        });
         providerConnections.set(
           providerId,
           Array.isArray(connections) ? (connections as Array<Record<string, unknown>>) : []
@@ -418,6 +421,22 @@ export async function expandAutoComboCandidatePool(
 
   if (Array.isArray(localAutoConfig?.candidatePool) && localAutoConfig.candidatePool.length > 0)
     return eligibleTargets;
+
+  // #COMBO-REF: if the combo references other combos via kind:"combo-ref" entries,
+  // the resolved eligibleTargets already represent the operator's intended pool.
+  // Expanding to ALL providers would defeat the purpose of the combo-ref constraint
+  // (e.g. an "auto" combo delegating to a "priority" sub-combo should not pull in
+  // every model from every active provider).
+  // When the operator has populated the combo's models[] (the common
+  // case for combos created through the dashboard multi-model editor
+  // with strategy=auto), the explicit list IS the candidate pool.
+  // Expansion to every active provider's catalog would silently
+  // override the operator's intent and inject models the operator
+  // never approved. Only fall through to the full-catalog expansion
+  // when the operator has not pre-populated a models[] (pure-auto
+  // combos that want to score every model).
+  const explicitModels = (combo as Record<string, unknown> | null | undefined)?.models;
+  if (Array.isArray(explicitModels) && explicitModels.length > 0) return eligibleTargets;
 
   try {
     const allConnections = await getCachedProviderConnections({ isActive: true });

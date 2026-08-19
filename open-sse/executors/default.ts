@@ -44,7 +44,7 @@ import { buildMaritalkChatUrl } from "../config/maritalk.ts";
 import { LOCAL_PROVIDERS } from "@/shared/constants/providers";
 import { isForbiddenCustomHeaderName } from "@/shared/constants/upstreamHeaders";
 import { getClaudeCodeCompatibleRequestDefaults } from "@/lib/providers/requestDefaults";
-import { buildClineHeaders, buildClinepassHeaders } from "@/shared/utils/clineAuth";
+import { applyClineAuthHeaders } from "@/shared/utils/clineAuth";
 import {
   normalizeHerokuChatUrl,
   normalizeDatabricksChatUrl,
@@ -139,6 +139,21 @@ export class DefaultExecutor extends BaseExecutor {
       const normalized = baseUrl.replace(/\/$/, "");
       return `${normalized}${customPath || "/messages"}`;
     }
+    // An alternate protocol selected on the connection carries a complete endpoint
+    // URL, so it must bypass the per-provider normalizers in the switch below —
+    // those assume the provider's default (OpenAI-shaped) path and would mangle it,
+    // e.g. appending "/chat/completions" to an Anthropic ".../v1/messages" endpoint.
+    {
+      const alternate = this.resolveAlternate(credentials);
+      const manualBaseUrl = credentials?.providerSpecificData?.baseUrl;
+      const hasManualBaseUrl = typeof manualBaseUrl === "string" && !!manualBaseUrl;
+      if (alternate?.baseUrl && !hasManualBaseUrl) {
+        // Operator's manual override (#6147) keeps its own semantics and falls
+        // through to the provider-specific handling below.
+        const normalized = alternate.baseUrl.replace(/\/$/, "");
+        return `${normalized}${alternate.chatPath || ""}${alternate.urlSuffix || ""}`;
+      }
+    }
     switch (this.provider) {
       case "openai": {
         // #5842: responses-only models (o1-pro / gpt-5.x-pro) 404 on
@@ -197,7 +212,12 @@ export class DefaultExecutor extends BaseExecutor {
             ? "responses"
             : "chat";
         const baseUrl = this.resolveBaseUrl(credentials);
-        return normalizeAzureAiChatUrl(baseUrl, apiType);
+        const apiVersion =
+          typeof credentials?.providerSpecificData?.apiVersion === "string" &&
+          credentials.providerSpecificData.apiVersion.trim()
+            ? credentials.providerSpecificData.apiVersion.trim()
+            : "2024-12-01-preview";
+        return normalizeAzureAiChatUrl(baseUrl, apiType, model, apiVersion);
       }
       case "watsonx": {
         const baseUrl = this.resolveBaseUrl(credentials);
@@ -217,7 +237,8 @@ export class DefaultExecutor extends BaseExecutor {
         const baseUrl = this.resolveBaseUrl(credentials);
         return normalizeSapChatUrl(baseUrl);
       }
-      case "xiaomi-mimo": {
+      case "xiaomi-mimo":
+      case "xiaomi-mimo-token-plan": {
         const baseUrl = this.resolveBaseUrl(credentials);
         return normalizeXiaomiMimoChatUrl(baseUrl);
       }
@@ -382,14 +403,14 @@ export class DefaultExecutor extends BaseExecutor {
       case "glm-coding-apikey":
         headers["x-api-key"] = effectiveKey || credentials.accessToken;
         break;
-      case "clinepass": // dual-auth (OAuth or BYOK) — see buildClinepassHeaders()
-        Object.assign(headers, buildClinepassHeaders(credentials, effectiveKey));
+      case "clinepass": // dual-auth (OAuth or BYOK) — see applyClineAuthHeaders()
+        applyClineAuthHeaders(headers, credentials, effectiveKey, clientHeaders, true);
         break;
       case "cline":
         // Cline's API requires the bearer token prefixed with `workos:` plus a
         // set of Cline client-identification headers; plain `Bearer <token>`
-        // is rejected upstream. buildClineHeaders() emits both.
-        Object.assign(headers, buildClineHeaders(effectiveKey || credentials.accessToken));
+        // is rejected upstream. applyClineAuthHeaders() emits both.
+        applyClineAuthHeaders(headers, credentials, effectiveKey, clientHeaders, false);
         break;
       default:
         if (isClaudeCodeCompatible(this.provider)) {
@@ -438,9 +459,12 @@ export class DefaultExecutor extends BaseExecutor {
             headers["anthropic-version"] = "2023-06-01";
           }
         } else {
-          // Use registry authHeader if available, otherwise default to bearer
+          // Use registry authHeader if available, otherwise default to bearer.
+          // An alternate protocol selected on the connection carries its own auth
+          // scheme (e.g. claude uses x-api-key where openai uses bearer).
           const entry = getRegistryEntry(this.provider);
-          const authHeader = entry?.authHeader || "bearer";
+          const alternate = this.resolveAlternate(credentials);
+          const authHeader = alternate?.authHeader || entry?.authHeader || "bearer";
           const token = effectiveKey || credentials.accessToken || entry?.anonymousApiKey;
           if (token) {
             if (authHeader === "x-api-key") {
@@ -665,7 +689,7 @@ export class DefaultExecutor extends BaseExecutor {
 
       // #1961: Map max_tokens -> max_completion_tokens for recent OpenAI models
       if (targetFormat === "openai") {
-        const isRecentOpenAI = /^(o1|o3|o4|gpt-5)/i.test(model);
+        const isRecentOpenAI = /^(?:openai\/)?(?:o1|o3|o4|gpt-5)/i.test(model);
         if (isRecentOpenAI && withDefaults && typeof withDefaults === "object") {
           const defaultsRecord = withDefaults as Record<string, unknown>;
           if ("max_tokens" in defaultsRecord) {

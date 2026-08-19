@@ -2,6 +2,8 @@
  * Provider catalog data — extracted from providers.ts (god-file decomposition).
  * Pure data literal; re-exported by the providers.ts barrel. No behavior change.
  */
+import { GITLAB_DUO_OAUTH_SETUP_MESSAGE } from "@/shared/constants/gitlabDuoSetupMessage";
+
 export const OAUTH_PROVIDERS = {
   "ghe-copilot": {
     id: "ghe-copilot",
@@ -36,7 +38,7 @@ export const OAUTH_PROVIDERS = {
     subscriptionRisk: true,
     riskNoticeVariant: "oauth",
     authHint:
-      "Paste your ~/.grok/auth.json (or the JWT access token) from the Grok Build CLI; refresh_token is rotated automatically.",
+      "Sign in with your browser, or paste your ~/.grok/auth.json (or the JWT access token) from the Grok Build CLI; refresh_token is rotated automatically either way.",
   },
   qoder: {
     id: "qoder",
@@ -122,8 +124,8 @@ export const OAUTH_PROVIDERS = {
     color: "#FC6D26",
     textIcon: "GL",
     website: "https://docs.gitlab.com/user/duo_agent_platform/code_suggestions/",
-    authHint:
-      "OAuth application with ai_features + read_user scopes. Configure GITLAB_DUO_OAUTH_CLIENT_ID and optionally GITLAB_DUO_OAUTH_CLIENT_SECRET on this OmniRoute instance.",
+    // #8688: full actionable recipe (same string as authorize error + OAuthModal setup step)
+    authHint: GITLAB_DUO_OAUTH_SETUP_MESSAGE,
   },
   cursor: {
     id: "cursor",
@@ -176,6 +178,9 @@ export const OAUTH_PROVIDERS = {
     icon: "psychology",
     color: "#1E40AF",
     textIcon: "KC",
+    // Kimi official-partnership aff link (2026-07) — the "Kimi Coding Plan"
+    // tracking link. Was previously unset (no header link rendered at all).
+    website: "https://www.kimi.com/code?aff=omniroute",
     subscriptionRisk: true,
     riskNoticeVariant: "oauth",
     authHint:
@@ -212,7 +217,7 @@ export const OAUTH_PROVIDERS = {
     icon: "smart_toy",
     color: "#9D4EDD",
     textIcon: "CP",
-    website: "https://cline.bot/clinepass",
+    website: "https://cline.bot/cline-pass",
     subscriptionRisk: true,
     riskNoticeVariant: "oauth",
     authHint:

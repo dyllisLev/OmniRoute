@@ -36,6 +36,7 @@ const STATIC_MODEL_PROVIDERS: Record<string, () => Array<{ id: string; name: str
   antigravity: () => ANTIGRAVITY_PUBLIC_MODELS.map((model) => ({ ...model })),
   claude: () => [
     { id: "claude-fable-5", name: "Claude Fable 5" },
+    { id: "claude-opus-5", name: "Claude Opus 5" },
     { id: "claude-opus-4-8", name: "Claude Opus 4.8" },
     { id: "claude-opus-4-7", name: "Claude Opus 4.7" },
     { id: "claude-opus-4-6", name: "Claude Opus 4.6" },
@@ -72,6 +73,13 @@ const STATIC_MODEL_PROVIDERS: Record<string, () => Array<{ id: string; name: str
     // selection like devin-cli's ACP models do — single non-selectable placeholder
     // so the "Available Models" UI shows something instead of a hard failure (#6142).
     { id: "devin", name: "Devin (Cognition cloud agent)" },
+  ],
+  "amazon-q": () => [
+    // Amazon Q Developer shares KiroExecutor + OAuth wiring with kiro but has no
+    // discovery config or registry catalog of its own — single non-selectable
+    // placeholder so the "Available Models" UI shows something instead of the
+    // hard "does not support models listing" failure (#7820).
+    { id: "amazon-q", name: "Amazon Q Developer" },
   ],
   "linkup-search": () => [
     // Linkup web search — the "model" is the search depth (docs.linkup.so #5571).

@@ -24,6 +24,7 @@ import { resolveDashboardProviderInfo } from "../../../providerPageUtils";
 import {
   isBaseUrlConfigurableProvider,
   isBaseUrlOverrideEligibleProvider,
+  getAlternateFormats,
   getProviderBaseUrlDefault,
   getProviderBaseUrlHint,
   getProviderBaseUrlPlaceholder,
@@ -113,6 +114,7 @@ export default function EditConnectionModal({
     apiKey: "",
     healthCheckInterval: 60,
     baseUrl: "",
+    targetFormat: "",
     cx: "",
     region: "",
     apiRegion: "international",
@@ -178,6 +180,9 @@ export default function EditConnectionModal({
       connectionProviderSpecificData.baseUrl.trim().length > 0
   );
   const usesBaseUrl = isConfigurableBaseUrl || (isBaseUrlOverrideEligible && showBaseUrlOverride);
+  // Protocol selector: only for providers that declare alternatives.
+  const alternateFormats = getAlternateFormats(provider);
+  const showProtocolSelector = alternateFormats.length > 0;
   const defaultBaseUrl = getProviderBaseUrlDefault(provider);
   const isVertex = provider === "vertex" || provider === "vertex-partner";
   const { defaultRegion, showsRegion } = getProviderRegionConfig(provider);
@@ -237,6 +242,7 @@ export default function EditConnectionModal({
     if (isOpen && connection) {
       const effectiveProvider = connection.provider || providerId;
       const existingBaseUrl = stringField(connection.providerSpecificData?.baseUrl);
+      const existingTargetFormat = stringField(connection.providerSpecificData?.targetFormat);
       const existingRegion = stringField(connection.providerSpecificData?.region);
       const existingCustomUserAgent = stringField(connection.providerSpecificData?.customUserAgent);
       const existingOpenRouterPreset = stringField(connection.providerSpecificData?.preset);
@@ -290,6 +296,7 @@ export default function EditConnectionModal({
         apiKey: "",
         healthCheckInterval: connection.healthCheckInterval ?? 60,
         baseUrl: existingBaseUrl || defaultBaseUrl,
+        targetFormat: existingTargetFormat || "",
         cx: existingCx,
         region: existingRegion || (showsRegion ? defaultRegion : ""),
         apiRegion: (connection.providerSpecificData?.apiRegion as string) || "international",
@@ -589,6 +596,12 @@ export default function EditConnectionModal({
       }
       if (updates.providerSpecificData) {
         updates.providerSpecificData.disableCooling = formData.disableCooling ? true : undefined;
+        // Explicit `null`, not `undefined`: the PUT route merges
+        // { ...existing, ...incoming }, so omitting the key would keep the previous
+        // choice and switching back to the default would never take effect.
+        if (showProtocolSelector) {
+          updates.providerSpecificData.targetFormat = formData.targetFormat || null;
+        }
       }
       const freeOnlyChanged =
         showFreeModelsToggle &&
@@ -950,7 +963,7 @@ export default function EditConnectionModal({
                       min={0}
                       value={formData.rpm}
                       onChange={(e) => setFormData({ ...formData, rpm: e.target.value })}
-                      placeholder="Inherit"
+                      placeholder={t("inherit")}
                       hint={t("rateLimitOverridesRpmHint")}
                     />
                     <Input
@@ -959,7 +972,7 @@ export default function EditConnectionModal({
                       min={0}
                       value={formData.tpm}
                       onChange={(e) => setFormData({ ...formData, tpm: e.target.value })}
-                      placeholder="Inherit"
+                      placeholder={t("inherit")}
                       hint={t("rateLimitOverridesTpmHint")}
                     />
                     <Input
@@ -968,7 +981,7 @@ export default function EditConnectionModal({
                       min={0}
                       value={formData.tpd}
                       onChange={(e) => setFormData({ ...formData, tpd: e.target.value })}
-                      placeholder="Inherit"
+                      placeholder={t("inherit")}
                       hint={t("rateLimitOverridesTpdHint")}
                     />
                     <Input
@@ -977,7 +990,7 @@ export default function EditConnectionModal({
                       min={0}
                       value={formData.minTime}
                       onChange={(e) => setFormData({ ...formData, minTime: e.target.value })}
-                      placeholder="Inherit"
+                      placeholder={t("inherit")}
                       hint={t("rateLimitOverridesMinTimeHint")}
                     />
                     <Input
@@ -988,7 +1001,7 @@ export default function EditConnectionModal({
                       onChange={(e) =>
                         setFormData({ ...formData, rateLimitMaxConcurrent: e.target.value })
                       }
-                      placeholder="Inherit"
+                      placeholder={t("inherit")}
                       hint={t("rateLimitOverridesMaxConcurrentHint")}
                     />
                   </div>
@@ -1032,6 +1045,26 @@ export default function EditConnectionModal({
                   )
                 : undefined)
             }
+          />
+        )}
+
+        {showProtocolSelector && (
+          <Select
+            label={providerText(t, "apiProtocolLabel", "API protocol")}
+            value={formData.targetFormat}
+            options={[
+              {
+                value: "",
+                label: providerText(t, "apiProtocolDefault", "OpenAI-compatible (default)"),
+              },
+              ...alternateFormats.map((alt) => ({ value: alt.format, label: alt.label })),
+            ]}
+            onChange={(e) => setFormData({ ...formData, targetFormat: e.target.value })}
+            hint={providerText(
+              t,
+              "apiProtocolHint",
+              "Some providers publish the same models over more than one protocol. Leave the default unless you need the alternative."
+            )}
           />
         )}
 
